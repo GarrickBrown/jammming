@@ -6,7 +6,7 @@ class SearchBar extends Component {
 		return (
 			<div className="SearchBar">
 				<input placeholder="Enter A Song, Album, or Artist" />
-				<a href=".">SEARCH</a>
+				<a >SEARCH</a>
 			</div>
 		);
 	}
