@@ -11,34 +11,49 @@ const Spotify = {
 		}
 		let url = window.location.href;
 		if (url.match(/access_token=([^&]*)/) && url.match(/expires_in=([^&]*)/)) {
-			accessToken = url.match(/access_token=([^&]*)/)[0];
-			expiresIn = url.match(/expires_in=([^&]*)/)[0];
+			accessToken = url.match(/access_token=([^&]*)/)[1];
+			expiresIn = url.match(/expires_in=([^&]*)/)[1];
 			window.setTimeout(() => accessToken = '', expiresIn * 1000);
 			window.history.pushState('Access Token', null, '/');
-            console.log("access token successfully retrieved.");
+			console.log('attempt to retrieve access token successful');
 			return accessToken;
 		} else {
-			const authorizeUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&scope=playlist-modify-public&redirect_uri=${REDIRECT_URI}`;
-			window.location.href = authorizeUrl;
+			const authorizeUrlRedirect = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&scope=playlist-modify-public&redirect_uri=${REDIRECT_URI}`;
+			window.location.href = authorizeUrlRedirect;
 			console.log('attempt to retrieve access token');
+		}
+	},
+
+	async search(searchTerm) {
+		const token = this.getAccessToken();
+		const searchUrl = `https://api.spotify.com/v1/search?type=track&q=${searchTerm}`;
+		try {
+			const response = await fetch(searchUrl, {
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			});
+			if (response.ok) {
+				const jsonResponse = await response.json();
+				let tracksArray = [];
+				if (!jsonResponse.tracks) {
+					return tracksArray;
+				}
+				tracksArray = jsonResponse.tracks.items.map(track => {
+					return {
+						id: track.id,
+						name: track.name,
+						artist: track.artists[0].name,
+						album: track.album.name,
+						uri: track.uri
+					};
+				});
+				return tracksArray;
+			}
+		} catch(error) {
+			console.log(error);
 		}
 	}
 };
-
-/*const apiKey = 'AIzaSyBAeTWYeoeidXZcdKuK3V4BtSC3TRP2sCc';
-export const Auto = async (location) => {
-	try {
-		const response = await fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${location}&types=geocode&key=${apiKey}&sessiontoken=1`);
-		if (response.ok) {
-			const jsonResponse = await response.json();
-			console.log(jsonResponse);
-			if (jsonResponse.status === 'OK') {
-				return jsonResponse.predictions[0].description;
-			}
-		}
-	} catch(error) {
-		console.log(error);
-	}
-};*/
 
 export default Spotify;

@@ -3,32 +3,13 @@ import './App.css';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
+import Spotify from '../../util/Spotify';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchResults: [{
-        name: 'Breezy',
-        artist: 'Breezy',
-        album: 'Breezy',
-        id: 1,
-        uri: 1
-      },
-      {
-        name: 'Breezy',
-        artist: 'Breezy',
-        album: 'Breezy',
-        id: 2,
-        uri: 2
-      },
-      {
-        name: 'Breezy',
-        artist: 'Breezy',
-        album: 'Breezy',
-        id: 3,
-        uri: 3
-      }],
+      searchResults: [],
       playlistName: 'Playlist',
       playlistTracks: [{
         name: 'Play Breezy',
@@ -91,7 +72,11 @@ class App extends Component {
   }
 
   search(searchTerm) {
-    console.log(searchTerm);
+    Spotify.search(searchTerm).then(tracksArray => {
+      this.setState({
+        searchResults: tracksArray
+      });
+    });
   }
 
   render() {
