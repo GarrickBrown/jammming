@@ -1,5 +1,5 @@
-const CLIENT_ID = '282f432a01c645bc88179e2176769124';
-const REDIRECT_URI = 'http://localhost:3000/';
+const CLIENT_ID = 'Insert your client id';
+const REDIRECT_URI = 'http://jahjammming.surge.sh/';
 let accessToken;
 let expiresIn;
 
