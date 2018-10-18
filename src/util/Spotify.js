@@ -1,5 +1,5 @@
-const CLIENT_ID = 'Insert your client id';
-const REDIRECT_URI = 'http://jahjammming.surge.sh/';
+const CLIENT_ID = '282f432a01c645bc88179e2176769124';
+const REDIRECT_URI = 'http://localhost:3000/';
 let accessToken;
 let expiresIn;
 
@@ -46,7 +46,8 @@ const Spotify = {
 						name: track.name,
 						artist: track.artists[0].name,
 						album: track.album.name,
-						uri: track.uri
+						uri: track.uri,
+						preview_url: track.preview_url
 					};
 				});
 				return tracksArray;
