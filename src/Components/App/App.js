@@ -9,6 +9,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      latestSearch: [],
       searchResults: [],
       playlistName: 'New Playlist',
       playlistTracks: []
@@ -21,22 +22,33 @@ class App extends Component {
   }
 
   addTrack(track) {
-    let newList = [];
+    let newPlaylist = [];
+    let newResultList = [];
     if (this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
       return;
     } else {
-      newList = this.state.playlistTracks.concat([track]);
+      newPlaylist = this.state.playlistTracks.concat([track]);
+      newResultList = this.state.searchResults.filter(resultTrack => resultTrack.id !== track.id);
     }
     this.setState({
-      playlistTracks: newList
+      playlistTracks: newPlaylist,
+      searchResults: newResultList
     });
   }
 
   removeTrack(track) {
-    let newList = this.state.playlistTracks.filter(savedTrack => savedTrack.id !== track.id);
+    let newPlaylist = this.state.playlistTracks.filter(savedTrack => savedTrack.id !== track.id);
+    if (this.state.latestSearch.find(searchedTrack => searchedTrack.id === track.id)) {
+      let newResultList = this.state.searchResults;
+      newResultList.unshift(track);
+      this.setState({
+        searchResults: newResultList
+      });
+    }
     this.setState({
-      playlistTracks: newList
+      playlistTracks: newPlaylist,
     });
+
   }
 
   updatePlaylistName(playlist) {
@@ -59,7 +71,18 @@ class App extends Component {
   search(searchTerm) {
     Spotify.search(searchTerm).then(tracksArray => {
       this.setState({
-        searchResults: tracksArray
+        latestSearch: tracksArray
+      });
+      let newList = [];
+      for (let trackIndex = 0; trackIndex < tracksArray.length; trackIndex++) {
+        if (this.state.playlistTracks.find(savedTrack => savedTrack.id === tracksArray[trackIndex].id)) {
+          // Do nothing, continue with code
+        } else {
+          newList.push(tracksArray[trackIndex]);
+        }
+      }
+      this.setState({
+        searchResults: newList
       });
     });
   }
