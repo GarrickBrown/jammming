@@ -12,13 +12,16 @@ class App extends Component {
       latestSearch: [],
       searchResults: [],
       playlistName: 'New Playlist',
-      playlistTracks: []
+      playlistTracks: [],
+      loading: false
     };
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
     this.search = this.search.bind(this);
+    this.isLoading = this.isLoading.bind(this);
+    this.doneLoading = this.doneLoading.bind(this);
   }
 
   addTrack(track) {
@@ -58,6 +61,7 @@ class App extends Component {
   }
 
   savePlaylist() {
+    this.isLoading();
     const trackURIs = this.state.playlistTracks.map(playlist => playlist.uri);
     Spotify.savePlaylist(this.state.playlistName, trackURIs).then(() => {
       console.log(`New ${this.state.playlistName} of ${trackURIs.length} songs successfully saved.`);
@@ -65,6 +69,8 @@ class App extends Component {
       this.setState({
         playlistTracks: []
       });
+    }).then(() => {
+        this.doneLoading();
     });
   }
 
@@ -87,6 +93,18 @@ class App extends Component {
     });
   }
 
+  isLoading() {
+    this.setState({
+      loading: true
+    });
+  }
+
+  doneLoading() {
+    this.setState({
+      loading: false
+    });
+  }
+
   render() {
     return (
       <div>
@@ -102,6 +120,7 @@ class App extends Component {
                       onRemove={this.removeTrack}
                       onNameChange={this.updatePlaylistName}
                       onSave={this.savePlaylist}
+                      loading={this.state.loading}
             />
           </div>
         </div>

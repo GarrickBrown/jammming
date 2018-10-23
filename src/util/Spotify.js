@@ -69,6 +69,7 @@ const Spotify = {
 		let playlist_id;
 		let snapshot_id;
 		const userUrl = 'https://api.spotify.com/v1/me';
+
 		try {
 			const response = await fetch(userUrl, {
 				headers: authorizationHeader
@@ -113,6 +114,8 @@ const Spotify = {
 		} catch(error) {
 			console.log(error);
 		}
+
+
 	}
 };
 
