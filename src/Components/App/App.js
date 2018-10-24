@@ -75,6 +75,9 @@ class App extends Component {
   }
 
   search(searchTerm) {
+    if (!searchTerm) {
+      return;
+    }
     Spotify.search(searchTerm).then(tracksArray => {
       this.setState({
         latestSearch: tracksArray
@@ -93,6 +96,10 @@ class App extends Component {
     });
   }
 
+  accessCheck() {
+    Spotify.accessCheck();
+  }
+
   isLoading() {
     this.setState({
       loading: true
@@ -108,6 +115,7 @@ class App extends Component {
   render() {
     return (
       <div>
+        {this.accessCheck()}
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
         <div className="App">
           <SearchBar onSearch={this.search} />

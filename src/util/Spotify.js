@@ -6,21 +6,30 @@ let expiresIn;
 const Spotify = {
 	getAccessToken() {
 		if (accessToken) {
-			console.log('already have access token');
+			 console.log('using access token');
 			return accessToken;
 		}
 		let url = window.location.href;
-		if (url.match(/access_token=([^&]*)/) && url.match(/expires_in=([^&]*)/)) {
+		const authorizeUrlRedirect = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&scope=playlist-modify-private&redirect_uri=${REDIRECT_URI}`;
+		window.location.href = authorizeUrlRedirect;
+		console.log('attempt to retrieve access token');
+	},
+
+	accessCheck() {
+		console.log('access check:');
+		let url = window.location.href;
+		if (!accessToken) {
+			console.log('no access token');
+		}
+		if (accessToken) {
+			console.log('already have access token');
+		} else if (url.match(/access_token=([^&]*)/) && url.match(/expires_in=([^&]*)/)) {
 			accessToken = url.match(/access_token=([^&]*)/)[1];
 			expiresIn = url.match(/expires_in=([^&]*)/)[1];
 			window.setTimeout(() => accessToken = '', expiresIn * 1000);
 			window.history.pushState('Access Token', null, '/');
 			console.log('attempt to retrieve access token successful');
-			return accessToken;
-		} else {
-			const authorizeUrlRedirect = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&scope=playlist-modify-private&redirect_uri=${REDIRECT_URI}`;
-			window.location.href = authorizeUrlRedirect;
-			console.log('attempt to retrieve access token');
+			console.log(`access token expires in ${expiresIn} seconds`);
 		}
 	},
 
