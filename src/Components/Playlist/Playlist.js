@@ -20,7 +20,7 @@ class Playlist extends Component {
 						   onRemove={this.props.onRemove}
 						   isRemoval={true}
 				/>
-				{ this.props.loading && <img src="http://ajaxloadingimages.net/gif/image?imageId=cloud-upload&foreColor=00bfff&backColor=ffffff&size=64x64&transparent=true&rnd=1540293405926" /> }
+				{ this.props.loading && <img src="http://ajaxloadingimages.net/gif/image?imageId=cloud-upload&foreColor=00bfff&backColor=ffffff&size=64x64&transparent=true&rnd=1540293405926" alt='' /> }
 				<a className="Playlist-save" onClick={this.props.onSave} >SAVE TO SPOTIFY</a>
 				
 			</div>

@@ -9,7 +9,6 @@ const Spotify = {
 			 console.log('using access token');
 			return accessToken;
 		}
-		let url = window.location.href;
 		const authorizeUrlRedirect = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&scope=playlist-modify-private&redirect_uri=${REDIRECT_URI}`;
 		window.location.href = authorizeUrlRedirect;
 		console.log('attempt to retrieve access token');
