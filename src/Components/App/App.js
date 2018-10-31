@@ -11,7 +11,7 @@ class App extends Component {
     this.state = {
       latestSearch: [],
       searchResults: [],
-      playlistName: 'New Playlist',
+      playlistName: '',
       playlistTracks: [],
       loading: false
     };

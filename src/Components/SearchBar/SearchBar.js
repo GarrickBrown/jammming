@@ -5,7 +5,7 @@ class SearchBar extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			term: ''
+			term: '',
 		};
 		this.search = this.search.bind(this);
 		this.handleTermChange = this.handleTermChange.bind(this);
@@ -17,8 +17,10 @@ class SearchBar extends Component {
 	}
 
 	handleTermChange(event) {
+		sessionStorage.setItem('term', event.target.value);
+		let term = sessionStorage.getItem('term');
 		this.setState({
-			term: event.target.value
+			term: term,
 		});
 	}
 
@@ -28,10 +30,26 @@ class SearchBar extends Component {
 		}
 	}
 
+	componentWillMount() {
+		let term = sessionStorage.getItem('term');
+		if (term) {
+			this.setState({
+				term: term,
+			});
+		}
+	}
+
+	componentDidMount() {
+		let term = this.state.term;
+		if (term) {
+			this.search();
+		}
+	}
+
 	render() {
 		return (
 			<div className="SearchBar">
-				<input placeholder="Enter A Song, Album, or Artist" onChange={this.handleTermChange} onKeyPress={this.handleKeyPress} />
+				<input placeholder="Enter A Song, Album, or Artist" value={this.state.term} onChange={this.handleTermChange} onKeyPress={this.handleKeyPress} />
 				<a onClick={this.search} >SEARCH</a>
 			</div>
 		);
