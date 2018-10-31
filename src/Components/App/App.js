@@ -37,6 +37,7 @@ class App extends Component {
       playlistTracks: newPlaylist,
       searchResults: newResultList
     });
+    setTimeout(() => {sessionStorage.setItem('playlistTracks', JSON.stringify(this.state.playlistTracks))}, 0);
   }
 
   removeTrack(track) {
@@ -51,12 +52,14 @@ class App extends Component {
     this.setState({
       playlistTracks: newPlaylist,
     });
-
+    setTimeout(() => {sessionStorage.setItem('playlistTracks', JSON.stringify(this.state.playlistTracks))}, 0);
   }
 
   updatePlaylistName(playlist) {
+    sessionStorage.setItem('playlist', playlist);
+    let playlistName = sessionStorage.getItem('playlist');
     this.setState({
-      playlistName: playlist
+      playlistName: playlistName
     });
   }
 
@@ -110,6 +113,21 @@ class App extends Component {
     this.setState({
       loading: false
     });
+  }
+
+  componentWillMount() {
+    let playlistName = sessionStorage.getItem('playlist');
+    let playlistTracks = JSON.parse(sessionStorage.getItem('playlistTracks'));
+    if (playlistName) {
+      this.setState({
+        playlistName: playlistName,
+      })
+    }
+    if (playlistTracks) {
+      this.setState({
+        playlistTracks: playlistTracks,
+      })
+    }
   }
 
   render() {
